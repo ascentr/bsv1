@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}{% load widget_tweaks %}
+
+{% block header %}
+  <title> Signup </title>
+  <style>
+    .my-field {
+      padding:5px;
+      margin:5px;
+    }
+
+  </style>
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 mt-5">
+        <form action="{% url 'accounts:signup' %}" method="POST">
+          <h4>Signup</h4>
+          {% csrf_token %}
+            {% render_field form.name placeholder="Name" class="form-control my-field" %}
+            {% render_field form.username placeholder="Username" class="form-control my-field" %}
+            {% render_field form.email placeholder="Email" class="form-control my-field" %}
+            {% render_field form.password placeholder="Password" class="form-control my-field" %}
+            {% render_field form.confirm_password placeholder="Confirm Password" class="form-control my-field" %}
+            <br>
+            {% if form.errors %}
+            <div class="alert alert-danger aldert-dismissible fade show">
+              {% for field_errors in form.errors.values %}
+                {% for error in field_errors %}
+                <strong>{{error}}</strong>
+                {% endfor %}
+              {%  endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+              <ul>
+                <li>Your password can’t be too similar to your other personal information. </li>
+                <li>Your password must contain at least 8 characters. </li>
+                <li>Your password can’t be a commonly used password.</li>
+                <li>Your password can’t be entirely numeric.</li>
+              </ul>
+            </div>
+            {% endif %}
+
+            {% if request.GET.next %}
+              <input type="hidden" name="next" value=""{{ request.GET.next }} />
+            {% endif %}
+            <input type="submit" class="btn btn-outline-success" value="Signup" />
+
+          </form>
+      </div>
+
+    </div>
+  </div>
+
+
+{% endblock %}

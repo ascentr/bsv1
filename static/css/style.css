@@ -1,0 +1,118 @@
+table {
+  width: 80%;
+  background-color: rgb(206, 153, 255);
+  border:1px solid;
+}
+th {
+  text-align: center;
+}
+td {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  font-size:large;
+  border:1px solid gray;
+  background-color: rgb(189, 221, 210);
+}
+
+.icon-lrg {
+  font-size: 2em;
+}
+
+a {
+  text-decoration: none;
+  padding:10px;
+}
+
+.custom-link:hover {
+  background-color: rgb(206, 153, 255);
+}
+
+.form-style {
+  max-width: 650px; margin: auto; padding-top: 10px;
+}
+
+.content-fit {
+  min-height: min-content;
+  height: fit-content; 
+}
+
+
+/* Bookings Page Style */
+
+
+.wrapper {
+  background-color: rgb(255, 255, 255);
+  padding: 10px;
+  width: 80%;
+}
+
+.slots {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap; /* This ensures slots wrap if they overflow */
+}
+
+.slot {
+  /* padding: 10px; */
+  height: 40px;
+  border: 1px solid #ccc;
+  margin: 5px;
+  width: 250px;
+  box-sizing: border-box;
+  cursor:pointer;
+}
+
+.booked {
+  background-color:rgb(233, 172, 228); 
+  height: 100%;
+  width: 100%;
+  color: #721c24;
+}
+
+.available {
+  background-color: #d4edda;
+  height: 100%;
+  width: 100%;
+  color: #155724;
+}
+
+.service-item {
+  width:250px;
+  text-align: center;
+  /* font-weight: bold; */
+  font-size: 1em;
+  color: #333;
+  padding:3px;
+  margin: 5px;
+  background-color: #d4edda;
+  /* background-color:rgb(233, 172, 228);  */
+  min-height: 140px; 
+  border:1px solid; 
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.service-item-selected {
+  width:250px;
+  text-align: center;
+  /* font-weight: bold; */
+  font-size: 1em;
+  color: #333;
+  padding:3px;
+  margin: 5px;
+  /* background-color:rgb(133, 172, 028);  */
+  background-color:rgb(233, 172, 228); 
+  min-height: 140px; 
+  border:1px solid; 
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-confirm {
+background-color:rgb(233, 172, 228); 
+}
+
+.show-confirm {
+visibility: hidden;
+}

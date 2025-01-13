@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block header %}
+<title> Appointment Booking System </title>
+<style>
+
+</style>
+{% endblock%}
+{%  block content %}
+
+<div class="row py-5">
+  <div class="col-md-3 d-flex justify-content-end">
+    <div>
+      <a href="?month={{ prev_month }}&year={{ prev_year }}" class="custom-link"><span class="icon-lrg">&#8592;</span> Previous Month</a>
+    </div>
+  </div>
+  <div class="col-md-6 d-flex justify-content-center">
+    {{ html_cal|safe }}
+  </div>
+  <div class="col-md-3 d-flex justify-content-start">
+    <div>
+      <a href="?month={{ next_month }}&year={{ next_year }}" class="custom-link">Next Month <span class="icon-lrg">  &#8594;</span></a></div>
+    </div>
+</div>
+<div class="row">
+  <div class="col d-flex justify-content-center">
+     <a href="{% url 'bookings:bookings' %}" class="custom-link"> See Bookings </a>
+  </div>
+</div>
+
+
+{%  endblock  %}
