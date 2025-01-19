@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load bootstrap5 %}{% load widget_tweaks %}
+{% load widget_tweaks %}
 
 {% block header %}
   <title> Signup </title>
@@ -22,28 +22,47 @@
         <form action="{% url 'accounts:signup' %}" method="POST">
           <h4>Signup</h4>
           {% csrf_token %}
-            {% render_field form.name placeholder="Name" class="form-control my-field" %}
-            {% render_field form.username placeholder="Username" class="form-control my-field" %}
-            {% render_field form.email placeholder="Email" class="form-control my-field" %}
-            {% render_field form.password placeholder="Password" class="form-control my-field" %}
-            {% render_field form.confirm_password placeholder="Confirm Password" class="form-control my-field" %}
+       
+            <span class="input-group-text">
+              {% render_field form.name placeholder="Name" class="form-control my-field" %}
+            </span>
+            <span class="input-group-text">
+              {% render_field form.username placeholder="Username" class="form-control my-field" %}
+            </span>
+            <span class="input-group-text">
+              {% render_field form.email placeholder="Email" class="form-control my-field" %}
+            </span>
+
+            <span class="input-group-text"  onclick="password_show_hide();">
+              {% render_field form.password placeholder="Password" class="form-control my-field" id="pwd" %}
+              <i class="bi bi-eye-fill" id="show_eye"></i>
+              <i class="bi bi-eye-slash-fill d-none" id="hide_eye"></i>
+            </span>
+
+            <span class="input-group-text" onclick="password_show_hide2();">
+              {% render_field form.confirm_password placeholder="Confirm Password" class="form-control my-field" id="pwd2" %}
+              <i class="bi bi-eye-fill" id="show_eye"></i>
+              <i class="bi bi-eye-slash-fill d-none" id="hide_eye"></i>
+            </span>            
             <br>
             {% if form.errors %}
-            <div class="alert alert-danger aldert-dismissible fade show">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
               {% for field_errors in form.errors.values %}
                 {% for error in field_errors %}
-                <strong>{{error}}</strong>
+                  <strong>{{error}}</strong>
                 {% endfor %}
               {%  endfor %}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% else %}
-            <div class="alert alert-info">
+            <div class="alert alert-info  alert-dismissible">
               <ul>
                 <li>Your password can’t be too similar to your other personal information. </li>
                 <li>Your password must contain at least 8 characters. </li>
                 <li>Your password can’t be a commonly used password.</li>
                 <li>Your password can’t be entirely numeric.</li>
               </ul>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endif %}
 
@@ -54,9 +73,25 @@
 
           </form>
       </div>
-
     </div>
   </div>
-
+  <script>
+    function password_show_hide() {
+        var x = document.getElementById("pwd");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+    function password_show_hide2() {
+        var x = document.getElementById("pwd2");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+  </script>
 
 {% endblock %}

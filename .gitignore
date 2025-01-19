@@ -13,8 +13,11 @@ venv/
 ENV/ 
 env.bak/ 
 venv.bak/ 
+
+
 #project
 scrap.py
+todos.txt
 db.sqlite3
 media
 *-save.py
@@ -22,6 +25,7 @@ test.html
 *-save.html
 calendar.html
 selected_day.html
+
 
 # pyenv 
 .python-version 

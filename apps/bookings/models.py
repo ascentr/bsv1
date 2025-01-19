@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
+from apps.accounts.models import User
 
 class Day(models.Model):
   day_today = models.DateField(default=datetime.today)
@@ -25,7 +26,7 @@ class Day(models.Model):
 
 
 class Booking(models.Model):
-  # customer = models.ForeignKey(User, on_delete=models.CASCADE) # ignore for now 
+  customer = models.ForeignKey(User, on_delete=models.CASCADE, default=999000) 
   artist = models.CharField(max_length=255, blank=True, null=True)  # Could be linked to a User model for staff
   service = models.CharField(max_length=255)  # To be refined when the Service model is ready
   updated_at = models.DateTimeField(auto_now=True)
@@ -36,8 +37,5 @@ class Booking(models.Model):
   comments = models.TextField(blank=True)
 
   def __str__(self):
-    # return f"{self.service} for {self.customer.username}"
-    return f"{self.service} for Admin"
-
-
-
+    return f"{self.service} for {self.customer}"
+    # return f"{self.service} for Admin"

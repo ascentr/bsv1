@@ -5,6 +5,8 @@ from calendar import  HTMLCalendar
 import datetime
 from datetime import datetime,timedelta, time
 from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 import json
 from django.contrib import messages
 from  .temp_data import services_data
@@ -94,7 +96,11 @@ def dayview(request, date=None):
   next_day = day_date + timedelta(days=1)
   prev_day = day_date - timedelta(days=1)
 
+  is_authenticated = request.user.is_authenticated
   context ={ 
+    'user' : request.user,
+    'is_authenticated':request.user.is_authenticated,
+    'login_url': 'accounts:login',
     'services': services,
     'day': day,
     'slots': slots,
@@ -106,44 +112,54 @@ def dayview(request, date=None):
     }
   return render(request, 'bookings/dayview.html', context)
 
+
 def create_booking(request):
 
-  customer = request.user
+  if request.user.is_authenticated:
+    customer = request.user
+    print("user is ===> ", customer)
 
-  if request.method == 'POST':
-    try:
-      data = json.loads(request.body)
-
+    if request.method == 'POST':
       try:
-        booking_date = datetime.strptime(data['date'], '%A %b %d, %Y').date()
-      except ValueError:
-        return JsonResponse({'error': 'Invalid date format'}, status=400)
+        data = json.loads(request.body)
 
-      service = data.get('service', {}).get('name')
-      slot = data.get('slot')
-      slots_number = data.get('service', {}).get('slotsnumber', 1)
-      if not service or not slot:
-        return JsonResponse({'error': 'Missing required fields'}, status=400)
+        try:
+          booking_date = datetime.strptime(data['date'], '%A %b %d, %Y').date()
+        except ValueError:
+          return JsonResponse({'error': 'Invalid date format'}, status=400)
 
-      # Create booking
-      booking = Booking.objects.create(
-        artist="any",
-        service=service,
-        booking_date=booking_date,
-        start_time=slot,
-        booked_slots=slots_number,
-        paid=False,
-        comments='capture from the userform',
-      )
-      booking.save()
-      messages.success(request, "Booking Created Successfully")
-      return JsonResponse({'message': 'Booking created successfully!'}, status=201)
-    except Exception as e:
-      print(f"Unhandled exception: {e}")
-      messages.error(request, "There was an error")
-      return JsonResponse({'error': str(e)}, status=400)
+        service = data.get('service', {}).get('name')
+        slot = data.get('slot')
+        slots_number = data.get('service', {}).get('slotsnumber', 1)
+        if not service or not slot:
+          return JsonResponse({'error': 'Missing required fields'}, status=400)
 
-  return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+        # Create booking
+        booking = Booking.objects.create(
+          customer = customer,
+          artist="any",
+          service=service,
+          booking_date=booking_date,
+          start_time=slot,
+          booked_slots=slots_number,
+          paid=False,
+          comments='capture from the userform',
+        )
+        booking.save()
+        messages.success(request, "Booking Created Successfully")
+        return JsonResponse({'message': 'Booking created successfully!'}, status=201)
+
+      except Exception as e:
+        print(f"Unhandled exception: {e}")
+        messages.error(request, "There was an error")
+        return JsonResponse({'error': str(e)}, status=400)
+  
+    return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+  else:
+    print(request.user)
+    messages.warning(request, 'Please login to make a booking')
+    return JsonResponse({'message': 'Please Login to make a booking'})
+
 
 
 def bookings(request):

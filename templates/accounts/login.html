@@ -7,7 +7,6 @@
 
 {% block content %}
 
-
 <div class="container-fluid">
   <div class="container">
     <div class="row justify-content-center">
@@ -49,6 +48,13 @@
                   <input type="submit" class='btn btn-primary' value="Login" style="margin-right: 15px;">
               </div>
               <br>
+
+            {%  for message in messages %}  
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>{{message}}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
             </form>
 
             <p><br />

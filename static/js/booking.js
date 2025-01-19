@@ -4,14 +4,21 @@ const selectedData={}
 var serviceSelected = false
 var timeSelected = false
 var confirmButtonCreated = false
+const authInfo = document.getElementById('confirm-section')
+const user = authInfo.getAttribute('data-user') 
+const isAuthenticated = authInfo.getAttribute('data-auth-status')
+const currentUrl = encodeURIComponent(window.location.href);
+const loginUrl = authInfo.getAttribute('data-login-url')
+console.log(`is authenticated ? ${isAuthenticated}, user => ${user}, login url => ${loginUrl}`)
+
+document.getElementById('form').addEventListener('submit', submitData);
+
 
 document.querySelector('.slot').addEventListener('click', (e) =>{
   if (e.target.classList.contains('available')){
     handleSlot(e.target)
   }
 })
-
-document.getElementById('form').addEventListener('submit', submitData);
 
 function handleClick(e) {
   // Get all elements with the class "store-item"
@@ -38,8 +45,14 @@ function handleClick(e) {
 function handleSlot(e) {
   if (e.classList.contains('booked')) return;
 
+
+  // boostrap alert
   if (serviceSelected == false ) {
-    alert("Please Select A Service First")
+    document.getElementById('show-alert').innerHTML = 
+    `<div class="alert alert-warning alert-dismissible" role="alert" style="width: 50%;">
+        <strong>Please Choose a Service First</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+     </div>`
 
     document.getElementById("services").scrollIntoView({ behavior: "smooth" });
     return
@@ -50,50 +63,59 @@ function handleSlot(e) {
   e.innerHTML = `<strong>${e.dataset.slot}</strong> - Booked`;
   timeSelected = true
 
+  selectedData.user = e.dataset.user
   selectedData.slot = e.dataset.slot
   selectedData.date = e.dataset.date
   // Log the slot and date for confirmation
   document.getElementById('selected-details').innerHTML = 
     `<b>${selectedData.service.name}</b> booked for <br> Date: <b>${selectedData.date}</b><br>
       Time: <b>${selectedData.slot}</b>`
-  // generateConfirmButton()
+  generateConfirmButton()
   showConfirmButton()
   document.getElementById("confirm").scrollIntoView({ behavior: "smooth" });
 }
 
 function showConfirmButton(){
   const div = document.getElementById('show-confirm')
-  div.style.visibility = 'visible'
+  div.style.visibility.visible
 }
 
 //Confirmation button is generated once the time slot(s) are selected.  
+// if Anonymous user redirect to login else submitData() 
 // The submitData() onclick event calls the submit data function that uses fetch API to send data
 function generateConfirmButton(){
   if (confirmButtonCreated == false ){
-      const confirmButton = document.createElement('button');
-      confirmButton.textContent = "Confirm Booking";
-      confirmButton.classList.add('btn')
-      confirmButton.classList.add('btn-info')
-      confirmButton.classList.add('btn-confirm')
-      confirmButton.addEventListener("click", () => {
-        submitData()
-      })
-      // confirmButton.onclick = submitData()
-      document.getElementById('confirm-selected').appendChild(confirmButton);
-      confirmButtonCreated = true;
-      
-    }
+
+    const confirmButton = document.createElement('button');
+    confirmButton.textContent = "Confirm Booking";
+    confirmButton.classList.add('btn')
+    confirmButton.classList.add('btn-info')
+    confirmButton.classList.add('btn-confirm')
+
+    document.getElementById('confirm-selected').appendChild(confirmButton);
+    confirmButtonCreated = true; 
+
+    confirmButton.addEventListener("click", () => {
+      console.log("so far so good")
+      submitData()
+    })
+  }
 }
 
 function submitData(event){
   event.preventDefault();
-  const data = selectedData
-    
-  // console.log("data ==> ", data)
-  // testDebugger();
 
+    // if (isAuthenticated == true) {
+    //  } else {
+    //    console.log("WTG WTF", currentUrl)
+    //    document.location.href = `${loginUrl}?next=${currentUrl}`;
+    //  }  
+    //  testDebugger()
+
+  const data = selectedData    
   const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value; 
   url = "/bookings/create_booking/"
+
   fetch(url , {
     method : 'POST',
     headers : {
@@ -116,7 +138,7 @@ function submitData(event){
 
   })
   .catch(error => {
-    console.error('Error:', error)
+    console.error('Failed to create booking Error:', error)
     // testDebugger()
     // alert('Failed to create booking', error)
   });
@@ -125,7 +147,7 @@ function submitData(event){
 
   // console.log('logging Data from submitData =>', data.service.name, data.service.price, data.date, data.slot, data.service.slotsnumber)
 
-  function testDebugger() {
+function testDebugger() {
     console.log("Before debugger");
     debugger;
     console.log("After debugger");

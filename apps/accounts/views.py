@@ -5,7 +5,6 @@ from .models import User
 # from django.contrib.auth import authenticate
 
 
-# Create your views here.
 def signup(request):
   if request.user.is_authenticated:
     messages.warning(request, "You are already logged in.")
@@ -43,7 +42,7 @@ def login(request):
     if user is not None:
       print(user)
       auth.login(request, user)
-      messages.success(request, 'Login Successfull')
+      # messages.success(request, 'Login Successfull')
       return redirect('accounts:profile')
     else:
       print('wtf is the user')
@@ -52,8 +51,11 @@ def login(request):
 
   return render(request, 'accounts/login.html')
 
+def logout(request):
+  auth.logout(request)
+  messages.info(request, 'You have logged out')
+  return redirect('accounts:login')
 
 def profile(request):
-
   return render(request, 'accounts/profile.html')
   

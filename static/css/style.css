@@ -15,6 +15,10 @@ td {
   background-color: rgb(189, 221, 210);
 }
 
+h3 {
+  color: var(--primary);
+}
+
 .icon-lrg {
   font-size: 2em;
 }
@@ -43,13 +47,12 @@ a {
 
 .wrapper {
   background-color: rgb(255, 255, 255);
-  padding: 10px;
-  width: 80%;
+  /* padding: 10px; */
 }
 
 .slots {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: start;
   flex-wrap: wrap; /* This ensures slots wrap if they overflow */
 }
 
@@ -61,17 +64,22 @@ a {
   width: 250px;
   box-sizing: border-box;
   cursor:pointer;
+  border-radius: 3px;
 }
 
 .booked {
   background-color:rgb(233, 172, 228); 
   height: 100%;
+  align-content: center;
+  padding-left: 7;
   width: 100%;
   color: #721c24;
 }
 
 .available {
   background-color: #d4edda;
+  align-content: center;
+  padding-left: 7px;
   height: 100%;
   width: 100%;
   color: #155724;
